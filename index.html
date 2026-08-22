@@ -671,4 +671,149 @@ category_quality = df[df[<span class="str">'product_category_name_english'</span
 </script>
 
 </body>
+
+<!-- ================= GURGAON PROJECT ================= -->
+<section class="project" id="project-gurgaon">
+  <div class="wrap">
+    <div class="project-head">
+      <div class="eyebrow">Project 02</div>
+      <h2>Gurgaon Property Market Analysis</h2>
+      <p>An end-to-end cleaning and analysis of ~14,000 real-estate listings across Gurgaon — messy raw data, invalid BHK counts, and extreme outliers made this as much a data-cleaning exercise as an analysis one. Built across Python for exploration and Power BI for the story.</p>
+    </div>
+
+    <div class="filetabs" id="tabs-gurgaon">
+      <div class="filetab active" data-tab="g-overview">overview</div>
+      <div class="filetab" data-tab="g-python">analysis<span class="ext">.py</span></div>
+      <div class="filetab" data-tab="g-powerbi">dashboard<span class="ext">.pbix</span></div>
+      <div class="filetab" data-tab="g-insights">insights_log<span class="ext">.md</span></div>
+    </div>
+
+    <!-- OVERVIEW -->
+    <div class="panel active" id="g-overview">
+      <div class="stat-grid">
+        <div class="stat"><div class="num">14K</div><div class="label">Total listings</div></div>
+        <div class="stat"><div class="num">₹40.8M</div><div class="label">Average price</div></div>
+        <div class="stat"><div class="num">15.3K</div><div class="label">Avg. rate / sqft</div></div>
+        <div class="stat"><div class="num">245</div><div class="label">Localities covered</div></div>
+      </div>
+      <ul class="find-list">
+        <li><span class="bullet">→</span> Sector 42 has both the highest average price and highest rate per sqft among localities with a reliable sample size (60+ listings) — small-sample localities were filtered out to avoid outlier-driven rankings.</li>
+        <li><span class="bullet">→</span> No RERA price premium exists in this data — RERA-approved properties are priced slightly <strong>lower</strong> on average than non-approved ones.</li>
+        <li><span class="bullet">→</span> Villas command the highest rate per sqft (₹17,740), ahead of apartments, houses, and penthouses — plots are the cheapest per sqft.</li>
+        <li><span class="bullet">→</span> Area and price are moderately correlated (r ≈ 0.63), but area and <em>rate per sqft</em> show almost no relationship — bigger homes aren't priced higher per square foot.</li>
+        <li><span class="bullet">→</span> ~5,300 duplicate rows and 44 invalid BHK entries (e.g. "112 BHK") were identified and removed before any analysis — raw listing data required significant cleaning first.</li>
+      </ul>
+    </div>
+
+    <!-- PYTHON -->
+    <div class="panel" id="g-python">
+      <p class="code-caption">Clean, filter outliers, and answer the core market questions.</p>
+      <div class="codebox"><pre><span class="kwd">import</span> pandas <span class="kwd">as</span> pd
+
+df = pd.read_excel(<span class="str">'data/data_PowerBI_ready.xlsx'</span>, sheet_name=<span class="str">'PowerBI Ready'</span>)
+df = df.drop_duplicates()
+
+<span class="comment"># Exclude flagged outliers before analysis</span>
+df = df[df[<span class="str">'Area_Check'</span>] != <span class="str">'OUTLIER'</span>]   <span class="comment"># 5 giant land-plot listings</span>
+df = df[df[<span class="str">'BHK_Count'</span>] != 0]          <span class="comment"># Plots (no bedrooms) for BHK-based questions</span></pre></div>
+
+      <p class="code-caption">Locality ranking — filtered to a minimum sample size to avoid small-sample skew.</p>
+      <div class="codebox"><pre>locality_counts = df.groupby(<span class="str">'Locality'</span>)[<span class="str">'Price'</span>].count()
+reliable = locality_counts[locality_counts >= 30].index
+
+locality_avg_rate = df[df[<span class="str">'Locality'</span>].isin(reliable)] \
+    .groupby(<span class="str">'Locality'</span>)[<span class="str">'Rate per sqft'</span>].mean()
+
+<span class="kwd">print</span>(<span class="str">f"Highest rate/sqft locality: {locality_avg_rate.idxmax()}"</span>)
+<span class="comment"># Highest rate/sqft locality: Sector 42</span></pre></div>
+
+      <p class="code-caption">Does RERA approval carry a price premium?</p>
+      <div class="codebox"><pre>rera_yes = df[df[<span class="str">'RERA Approval'</span>] == <span class="str">'yes'</span>][<span class="str">'Price'</span>].mean()
+rera_no  = df[df[<span class="str">'RERA Approval'</span>] == <span class="str">'no'</span>][<span class="str">'Price'</span>].mean()
+
+<span class="kwd">print</span>(<span class="str">f"RERA-approved avg: {rera_yes:,.0f} | Not approved avg: {rera_no:,.0f}"</span>)
+<span class="comment"># RERA-approved avg: 40,031,294 | Not approved avg: 41,257,404
+# -> RERA-approved properties do NOT command a premium.</span></pre></div>
+    </div>
+
+    <!-- POWER BI -->
+    <div class="panel" id="g-powerbi">
+      <div class="shot">
+        <img src="screenshots/01_market_overview.png" alt="Market Overview dashboard">
+      </div>
+      <p class="shot-caption">Market Overview — KPI summary, price category breakdown, rate per sqft by property type.</p>
+
+      <div class="shot">
+        <img src="screenshots/02_location_insights.png" alt="Location Insights dashboard">
+      </div>
+      <p class="shot-caption">Location Insights — top localities by rate per sqft, filtered to exclude small-sample outliers.</p>
+
+      <div class="shot">
+        <img src="screenshots/03_property_characteristics.png" alt="Property Characteristics dashboard">
+      </div>
+      <p class="shot-caption">Property Characteristics — BHK configuration trends, area vs. price relationship.</p>
+
+      <div class="shot">
+        <img src="screenshots/04_builder_rera_analysis.png" alt="Builder and RERA Analysis dashboard">
+      </div>
+      <p class="shot-caption">Builder &amp; RERA Analysis — top builders by rate per sqft, RERA approval price comparison.</p>
+    </div>
+
+    <!-- INSIGHTS -->
+    <div class="panel" id="g-insights">
+      <div class="insight-block">
+        <h4>Data Quality Issues Found</h4>
+        <ul>
+          <li>~5,300 exact duplicate rows removed</li>
+          <li>44 rows with invalid BHK values (39, 95, 112, 132…) — data-entry errors, removed</li>
+          <li>999 rows with BHK_Count = 0 — kept, these are legitimate land "Plot" listings</li>
+          <li>5 extreme area outliers (up to 958,000 sqft / 22 acres) — flagged and excluded from area-based charts</li>
+          <li>Near-duplicate builder names (e.g. "Camelliaass" vs "Cameliaas") — confirmed typo variants merged</li>
+        </ul>
+      </div>
+      <hr class="section-divider">
+      <div class="insight-block">
+        <h4>Locality Pricing</h4>
+        <p>Sector 42 tops both average price and average rate/sqft <span class="num">(₹55,989/sqft)</span> among localities with 60+ listings. A raw, unfiltered ranking would have instead surfaced localities with 2–3 listings as "most expensive" — a statistical artifact, not a real market signal.</p>
+      </div>
+      <hr class="section-divider">
+      <div class="insight-block">
+        <h4>RERA Approval — No Premium</h4>
+        <p>RERA-approved listings average <span class="num">₹4.00 crore</span> vs <span class="num">₹4.13 crore</span> for non-approved — approval status does not command a price premium in this dataset.</p>
+      </div>
+      <hr class="section-divider">
+      <div class="insight-block">
+        <h4>Area vs. Price vs. Rate</h4>
+        <p>Correlation between area and price: <span class="num">r ≈ 0.63</span> (moderate). Correlation between area and rate per sqft: <span class="num">r ≈ 0.00</span> (none) — larger homes cost more in total, but not more per square foot.</p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<style>
+/* Scoped so it never touches the Olist section's tab logic */
+#project-gurgaon .filetab { }
+</style>
+
+<script>
+(function () {
+  var tabs = document.querySelectorAll('#tabs-gurgaon .filetab');
+  var panels = {
+    'g-overview': document.getElementById('g-overview'),
+    'g-python': document.getElementById('g-python'),
+    'g-powerbi': document.getElementById('g-powerbi'),
+    'g-insights': document.getElementById('g-insights')
+  };
+  tabs.forEach(function (tab) {
+    tab.addEventListener('click', function () {
+      tabs.forEach(function (t) { t.classList.remove('active'); });
+      Object.keys(panels).forEach(function (key) { panels[key].classList.remove('active'); });
+      tab.classList.add('active');
+      panels[tab.getAttribute('data-tab')].classList.add('active');
+    });
+  });
+})();
+</script>
+<!-- ================= END GURGAON PROJECT ================= -->
 </html>
