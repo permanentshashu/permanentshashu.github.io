@@ -618,60 +618,6 @@ category_quality = df[df[<span class="str">'product_category_name_english'</span
   </div>
 </section>
 
-<section class="more" id="more">
-  <div class="wrap">
-    <div class="eyebrow">Also building</div>
-    <h3 style="margin-top:8px;">More projects</h3>
-    <div class="ghost-grid">
-      <div class="ghost-card"><div class="mono">// next</div>Coming soon — this space is reserved for the next project.</div>
-      <div class="ghost-card"><div class="mono">// next</div>Coming soon — this space is reserved for the next project.</div>
-    </div>
-  </div>
-</section>
-
-<footer id="contact">
-  <div class="wrap">
-    <div class="copy">© 2026 Shashwat Huvannavar</div>
-    <div class="links">
-      <a href="mailto:shashwathuvannavar26@gmail.com">Email</a>
-      <a href="https://www.linkedin.com/in/shashwat-huvannavar-91082a326" target="_blank">LinkedIn</a>
-      <a href="https://github.com/permanentshashu/olist-ecommerce-analytics" target="_blank">GitHub</a>
-    </div>
-  </div>
-</footer>
-
-<script>
-  // Typing effect
-  const text = "SELECT name, role FROM analysts WHERE focus = 'data';";
-  const el = document.getElementById('typed');
-  const resultEl = document.getElementById('result');
-  let i = 0;
-  function type(){
-    if(i < text.length){
-      el.textContent += text.charAt(i);
-      i++;
-      setTimeout(type, 32);
-    } else {
-      setTimeout(()=> resultEl.classList.add('show'), 300);
-    }
-  }
-  type();
-
-  // Tabs
-  const tabs = document.querySelectorAll('.filetab');
-  const panels = document.querySelectorAll('.panel');
-  tabs.forEach(tab => {
-    tab.addEventListener('click', () => {
-      tabs.forEach(t => t.classList.remove('active'));
-      panels.forEach(p => p.classList.remove('active'));
-      tab.classList.add('active');
-      document.getElementById(tab.dataset.tab).classList.add('active');
-    });
-  });
-</script>
-
-</body>
-
 <!-- ================= GURGAON PROJECT ================= -->
 <section class="project" id="project-gurgaon">
   <div class="wrap">
@@ -817,3 +763,60 @@ rera_no  = df[df[<span class="str">'RERA Approval'</span>] == <span class="str">
 </script>
 <!-- ================= END GURGAON PROJECT ================= -->
 </html>
+
+  <section class="more" id="more">
+  <div class="wrap">
+    <div class="eyebrow">Also building</div>
+    <h3 style="margin-top:8px;">More projects</h3>
+    <div class="ghost-grid">
+      <div class="ghost-card"><div class="mono">// next</div>Coming soon — this space is reserved for the next project.</div>
+      <div class="ghost-card"><div class="mono">// next</div>Coming soon — this space is reserved for the next project.</div>
+    </div>
+  </div>
+</section>
+
+<footer id="contact">
+  <div class="wrap">
+    <div class="copy">© 2026 Shashwat Huvannavar</div>
+    <div class="links">
+      <a href="mailto:shashwathuvannavar26@gmail.com">Email</a>
+      <a href="https://www.linkedin.com/in/shashwat-huvannavar-91082a326" target="_blank">LinkedIn</a>
+      <a href="https://github.com/permanentshashu/olist-ecommerce-analytics" target="_blank">GitHub</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Typing effect
+  const text = "SELECT name, role FROM analysts WHERE focus = 'data';";
+  const el = document.getElementById('typed');
+  const resultEl = document.getElementById('result');
+  let i = 0;
+  function type(){
+    if(i < text.length){
+      el.textContent += text.charAt(i);
+      i++;
+      setTimeout(type, 32);
+    } else {
+      setTimeout(()=> resultEl.classList.add('show'), 300);
+    }
+  }
+  type();
+
+  // Tabs
+  const tabs = document.querySelectorAll('.filetab');
+  const panels = document.querySelectorAll('.panel');
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      tabs.forEach(t => t.classList.remove('active'));
+      panels.forEach(p => p.classList.remove('active'));
+      tab.classList.add('active');
+      document.getElementById(tab.dataset.tab).classList.add('active');
+    });
+  });
+</script>
+
+</body>
+</html>
+
+
